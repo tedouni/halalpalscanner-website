@@ -3,457 +3,572 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Halal Pal — Scan food barcodes and ingredient lists to instantly check halal compliance. Free on iOS and Android." />
-  <title>Halal Pal — Halal Food Scanner</title>
+  <title>Halal Pal Scanner — Is it halal? Scan food barcodes &amp; ingredients</title>
+  <meta name="description" content="Halal Pal Scanner checks if food is halal in seconds. Scan a barcode or the ingredient list and get a clear Halal, Mushbooh or Haram verdict with the reasons why. Free on iPhone." />
+  <link rel="canonical" href="https://halalpalscanner.com/" />
+  <meta name="apple-itunes-app" content="app-id=6761399488" />
+  <meta name="theme-color" content="#050a08" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Halal Pal Scanner" />
+  <meta property="og:title" content="Halal Pal Scanner — Is it halal? Know in seconds." />
+  <meta property="og:description" content="Scan a barcode or the ingredient list and get a clear Halal, Mushbooh or Haram verdict. Free on iPhone." />
+  <meta property="og:url" content="https://halalpalscanner.com/" />
+  <meta property="og:image" content="https://halalpalscanner.com/images/screen-01.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="images/app-icon.png" />
+  <link rel="apple-touch-icon" href="images/app-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "Halal Pal Scanner",
+    "alternateName": ["Halal Pal", "halalpalscanner"],
+    "operatingSystem": "iOS",
+    "applicationCategory": "LifestyleApplication",
+    "description": "Scan food barcodes and ingredient lists to check whether a product is halal, mushbooh or haram.",
+    "url": "https://halalpalscanner.com/",
+    "downloadUrl": "https://apps.apple.com/us/app/halal-pal-scanner/id6761399488",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
+      --bg: #050a08;
+      --bg-2: #0a1210;
+      --surface: rgba(255,255,255,0.045);
+      --surface-2: rgba(255,255,255,0.07);
+      --line: rgba(255,255,255,0.09);
+      --text: #f4f7f5;
+      --muted: #9fb1a9;
       --green: #10B981;
-      --green-dim: rgba(16,185,129,0.12);
-      --green-border: rgba(16,185,129,0.3);
-      --bg: #0A0A0A;
-      --card: #141414;
-      --text: #FFFFFF;
-      --muted: #9CA3AF;
-      --radius: 20px;
+      --green-2: #34D399;
+      --green-dim: rgba(16,185,129,0.14);
+      --amber: #F59E0B;
+      --red: #EF4444;
+      --radius: 24px;
+      --max: 1120px;
     }
+
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; } }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 
-    /* ── Nav ── */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 32px;
-      max-width: 960px;
-      margin: 0 auto;
+    /* Ambient glow behind the page */
+    .glow {
+      position: absolute; inset: 0 0 auto 0; height: 1100px; pointer-events: none; z-index: -1;
+      background:
+        radial-gradient(700px 520px at 78% 180px, rgba(16,185,129,0.22), transparent 70%),
+        radial-gradient(600px 420px at 10% 60px, rgba(16,185,129,0.10), transparent 70%);
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 18px;
+    /* ── Nav ─────────────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(5,10,8,0.62);
+      backdrop-filter: saturate(180%) blur(18px);
+      -webkit-backdrop-filter: saturate(180%) blur(18px);
+      border-bottom: 1px solid var(--line);
     }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: -0.3px; }
+    .brand img { width: 34px; height: 34px; border-radius: 9px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; font-size: 14px; font-weight: 600; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { color: #04130d !important; background: var(--green); padding: 9px 16px; border-radius: 999px; }
+    .nav-cta:hover { background: var(--green-2); }
+    @media (max-width: 720px) { .nav-links .hide-sm { display: none; } .nav-links { gap: 16px; } }
 
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-logo-icon svg { width: 18px; height: 18px; }
-
-    .nav-links {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-    .nav-privacy {
-      color: var(--muted);
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-    .nav-privacy:hover { color: var(--text); }
-
-    /* ── Hero ── */
-    .hero {
-      text-align: center;
-      padding: 80px 32px 64px;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      border-radius: 100px;
-      padding: 6px 14px;
-      font-size: 13px;
-      color: var(--green);
-      font-weight: 600;
-      margin-bottom: 28px;
-    }
-
-    .hero-badge span { width: 6px; height: 6px; background: var(--green); border-radius: 50%; display: inline-block; }
-
-    h1 {
-      font-size: clamp(36px, 7vw, 64px);
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    h1 em {
-      font-style: normal;
-      color: var(--green);
-    }
-
-    .hero-sub {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 480px;
-      margin: 0 auto 40px;
-      line-height: 1.6;
-    }
-
-    /* ── Download buttons ── */
-    .download-row {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
+    /* ── Buttons ─────────────────────────────────────── */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 24px;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: 600;
-      transition: opacity 0.2s, transform 0.15s;
-      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 24px; border-radius: 16px;
+      font-weight: 700; font-size: 16px;
+      transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
     }
-    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
-
-    .btn-primary {
-      background: var(--green);
-      color: #fff;
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--text);
-    }
-
     .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .btn-primary { background: var(--green); color: #04130d; box-shadow: 0 10px 30px rgba(16,185,129,0.35); }
+    .btn-primary:hover { background: var(--green-2); transform: translateY(-2px); }
+    .btn-ghost { background: var(--surface); border: 1px solid var(--line); color: var(--text); }
+    .btn-ghost:hover { background: var(--surface-2); }
 
-    /* ── Features ── */
-    .features {
-      max-width: 960px;
-      margin: 80px auto;
-      padding: 0 32px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
+    /* ── Hero ────────────────────────────────────────── */
+    .hero { position: relative; padding: 72px 0 56px; }
+    .hero .wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px; border-radius: 999px;
+      background: var(--green-dim); border: 1px solid rgba(16,185,129,0.35);
+      color: var(--green-2); font-size: 13px; font-weight: 700;
+    }
+    .pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--green-2); box-shadow: 0 0 10px var(--green-2); }
+    h1 {
+      margin: 22px 0 18px;
+      font-size: clamp(40px, 6.2vw, 72px);
+      line-height: 1.02; letter-spacing: -2.4px; font-weight: 800;
+    }
+    h1 em { font-style: normal; background: linear-gradient(120deg, #34D399, #10B981 60%, #0ea371); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { font-size: 19px; color: var(--muted); max-width: 520px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 32px 0 26px; }
+    .checks { display: flex; flex-wrap: wrap; gap: 10px 22px; color: var(--muted); font-size: 14px; font-weight: 600; }
+    .checks span { display: inline-flex; align-items: center; gap: 7px; }
+    .checks svg { width: 16px; height: 16px; color: var(--green-2); }
+
+    /* Phone frame */
+    .phone {
+      position: relative; width: 300px; aspect-ratio: 1260 / 2736;
+      padding: 11px; border-radius: 52px;
+      background: linear-gradient(145deg, #2a302d, #0d100f 40%, #1d2220);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 40px 90px rgba(0,0,0,0.6), 0 0 90px rgba(16,185,129,0.18);
+    }
+    .screen { position: relative; width: 100%; height: 100%; border-radius: 42px; overflow: hidden; background: #000; }
+    .screen img { width: 100%; height: 100%; object-fit: cover; }
+    .screen::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6.2%; background: #000; }
+    .screen::after {
+      content: ""; position: absolute; top: 1.5%; left: 50%; transform: translateX(-50%);
+      width: 30%; height: 3.1%; border-radius: 999px; background: #000; box-shadow: 0 0 0 1px #151515;
     }
 
-    .feature-card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      padding: 28px;
+    .hero-visual { position: relative; display: flex; justify-content: center; }
+    .chip {
+      position: absolute; display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 18px;
+      background: rgba(20,28,25,0.72); border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+      font-weight: 700; font-size: 15px;
+      animation: float 6s ease-in-out infinite;
+    }
+    .chip b { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: #04130d; font-size: 15px; }
+    .chip small { display: block; color: var(--muted); font-weight: 600; font-size: 12px; line-height: 1.2; }
+    .chip.c1 { top: 16%; left: -4%; }
+    .chip.c2 { top: 48%; right: -8%; animation-delay: -2s; }
+    .chip.c3 { bottom: 12%; left: -2%; animation-delay: -4s; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    @media (max-width: 900px) {
+      .hero .wrap { grid-template-columns: 1fr; text-align: center; }
+      .lead { margin: 0 auto; }
+      .hero-actions, .checks { justify-content: center; }
+      .phone { width: 260px; }
+      .chip.c1 { left: 2%; } .chip.c2 { right: 0; } .chip.c3 { left: 4%; }
+    }
+    @media (max-width: 480px) { .chip { font-size: 13px; padding: 9px 12px; } .chip small { display: none; } }
+
+    /* ── Trust strip ─────────────────────────────────── */
+    .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.015); }
+    .strip .wrap { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .stat { padding: 26px 12px; text-align: center; }
+    .stat strong { display: block; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+    .stat span { color: var(--muted); font-size: 14px; font-weight: 600; }
+    @media (max-width: 720px) { .stat { padding: 20px 6px; } .stat strong { font-size: 19px; } .stat span { font-size: 12.5px; } }
+
+    /* ── Sections ────────────────────────────────────── */
+    section.block { padding: 110px 0 0; }
+    .eyebrow { color: var(--green-2); font-weight: 800; font-size: 13px; letter-spacing: 1.4px; text-transform: uppercase; }
+    h2 { font-size: clamp(32px, 4.4vw, 48px); line-height: 1.08; letter-spacing: -1.4px; font-weight: 800; margin: 12px 0 14px; }
+    .sub { color: var(--muted); font-size: 18px; max-width: 580px; }
+    .center { text-align: center; }
+    .center .sub { margin: 0 auto; }
+
+    /* Verdicts */
+    .verdicts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
+    .verdict { padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); position: relative; overflow: hidden; }
+    .verdict::after { content: ""; position: absolute; inset: auto -40% -60% auto; width: 240px; height: 240px; border-radius: 50%; background: var(--c); opacity: .14; filter: blur(40px); }
+    .verdict .badge { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--c); color: #0b0f0d; margin-bottom: 18px; }
+    .verdict .badge svg { width: 22px; height: 22px; }
+    .verdict h3 { font-size: 22px; font-weight: 800; color: var(--c); margin-bottom: 6px; }
+    .verdict p { color: var(--muted); font-size: 15px; }
+    @media (max-width: 820px) { .verdicts { grid-template-columns: 1fr; } }
+
+    /* Showcase rows */
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; margin-top: 90px; }
+    .row.flip .row-text { order: 2; }
+    .row-visual { display: flex; justify-content: center; position: relative; }
+    .row-visual::before { content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%; background: var(--c, var(--green)); opacity: .16; filter: blur(70px); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .row-visual .phone { width: 280px; }
+    .row-text h3 { font-size: clamp(28px, 3.4vw, 38px); line-height: 1.1; letter-spacing: -1px; font-weight: 800; margin: 10px 0 14px; }
+    .row-text p { color: var(--muted); font-size: 17px; }
+    .bullets { list-style: none; margin-top: 22px; display: grid; gap: 12px; }
+    .bullets li { display: flex; gap: 12px; align-items: flex-start; font-weight: 600; }
+    .bullets svg { width: 20px; height: 20px; color: var(--green-2); flex-shrink: 0; margin-top: 3px; }
+    @media (max-width: 860px) {
+      .row { grid-template-columns: 1fr; gap: 36px; text-align: center; }
+      .row.flip .row-text { order: 0; }
+      .bullets { justify-items: center; }
+      .bullets li { text-align: left; }
     }
 
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
+    /* Feature grid */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+    .card { padding: 26px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); transition: border-color .2s, background .2s; }
+    .card:hover { border-color: rgba(16,185,129,0.35); background: var(--surface-2); }
+    .card .ic { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--green-dim); color: var(--green-2); margin-bottom: 16px; }
+    .card .ic svg { width: 21px; height: 21px; }
+    .card h4 { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 14.5px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
 
-    .feature-icon svg { width: 20px; height: 20px; }
+    /* Pricing */
+    .plans { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 820px; margin: 44px auto 0; }
+    .plan { padding: 32px; border-radius: 26px; background: var(--surface); border: 1px solid var(--line); }
+    .plan.pro { background: linear-gradient(160deg, rgba(16,185,129,0.20), rgba(16,185,129,0.05)); border-color: rgba(16,185,129,0.45); position: relative; }
+    .plan .tag { position: absolute; top: 20px; right: 20px; font-size: 12px; font-weight: 800; color: #04130d; background: var(--green-2); padding: 5px 10px; border-radius: 999px; }
+    .plan h3 { font-size: 20px; font-weight: 800; }
+    .price { font-size: 42px; font-weight: 800; letter-spacing: -1.5px; margin: 10px 0 2px; }
+    .price small { font-size: 16px; color: var(--muted); font-weight: 600; letter-spacing: 0; }
+    .plan .note { color: var(--muted); font-size: 14px; }
+    .plan ul { list-style: none; margin-top: 22px; display: grid; gap: 11px; }
+    .plan li { display: flex; gap: 10px; font-weight: 600; font-size: 15px; }
+    .plan li svg { width: 18px; height: 18px; color: var(--green-2); flex-shrink: 0; margin-top: 3px; }
+    @media (max-width: 720px) { .plans { grid-template-columns: 1fr; } }
 
-    .feature-card h3 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
+    /* FAQ */
+    .faq { max-width: 780px; margin: 40px auto 0; display: grid; gap: 12px; }
+    details { border-radius: 18px; background: var(--surface); border: 1px solid var(--line); padding: 4px 22px; }
+    details[open] { background: var(--surface-2); }
+    summary { cursor: pointer; list-style: none; padding: 18px 0; font-weight: 700; font-size: 16.5px; display: flex; justify-content: space-between; gap: 16px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--green-2); font-size: 22px; line-height: 1; }
+    details[open] summary::after { content: "–"; }
+    details p { color: var(--muted); padding: 0 0 20px; font-size: 15.5px; }
+    details a { color: var(--green-2); }
 
-    .feature-card p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ── How it works ── */
-    .how {
-      max-width: 680px;
-      margin: 0 auto 80px;
-      padding: 0 32px;
-      text-align: center;
-    }
-
-    .how h2 {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 40px;
-    }
-
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      text-align: left;
-    }
-
-    .step {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-    }
-
-    .step-num {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      color: var(--green);
-      font-weight: 700;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .step h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .step p { font-size: 14px; color: var(--muted); }
-
-    /* ── CTA ── */
+    /* Final CTA */
     .cta {
-      max-width: 680px;
-      margin: 0 auto 80px;
-      padding: 0 32px;
-      text-align: center;
+      margin-top: 110px; padding: 64px 32px; border-radius: 34px; text-align: center; position: relative; overflow: hidden;
+      background: radial-gradient(600px 300px at 50% 0%, rgba(16,185,129,0.35), transparent 70%), var(--bg-2);
+      border: 1px solid rgba(16,185,129,0.3);
     }
+    .cta img { width: 76px; height: 76px; border-radius: 18px; margin: 0 auto 22px; box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+    .cta h2 { margin-top: 0; }
+    .cta .sub { margin: 0 auto 30px; }
 
-    .cta-card {
-      background: var(--green-dim);
-      border: 1px solid var(--green-border);
-      border-radius: var(--radius);
-      padding: 48px 32px;
-    }
+    /* Support + footer */
+    .support { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+    .support .card a { color: var(--green-2); font-weight: 700; }
+    @media (max-width: 820px) { .support { grid-template-columns: 1fr; } }
 
-    .cta-card h2 {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 12px;
-    }
-
-    .cta-card p {
-      color: var(--muted);
-      margin-bottom: 28px;
-      font-size: 16px;
-    }
-
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.07);
-      padding: 24px 32px;
-      max-width: 960px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    footer p { font-size: 13px; color: var(--muted); }
-    footer a { color: var(--muted); font-size: 13px; transition: color 0.2s; }
+    footer { margin-top: 100px; border-top: 1px solid var(--line); }
+    footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding-top: 28px; padding-bottom: 40px; color: var(--muted); font-size: 14px; }
+    footer nav { display: flex; gap: 22px; }
     footer a:hover { color: var(--text); }
   </style>
 </head>
 <body>
+  <div class="glow" aria-hidden="true"></div>
 
   <!-- Nav -->
-  <nav>
-    <div class="nav-logo">
-      <div class="nav-logo-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/>
-          <line x1="9" y1="21" x2="9" y2="9"/>
-        </svg>
-      </div>
-      Halal Pal
+  <header class="nav">
+    <div class="wrap">
+      <a href="#" class="brand"><img src="images/app-icon.png" alt="" /> Halal Pal</a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="#features" class="hide-sm">Features</a>
+        <a href="#pricing" class="hide-sm">Pricing</a>
+        <a href="#faq" class="hide-sm">FAQ</a>
+        <a href="support.html" class="hide-sm">Support</a>
+        <a href="https://apps.apple.com/us/app/halal-pal-scanner/id6761399488" class="nav-cta">Get the app</a>
+      </nav>
     </div>
-    <div class="nav-links">
-      <a href="privacy.html" class="nav-privacy">Privacy Policy</a>
-      <a href="support.html" class="nav-privacy">Support</a>
-    </div>
-  </nav>
+  </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-badge">
-      <span></span> Free on iOS &amp; Android
-    </div>
-    <h1>Know what's <em>halal</em><br>before you eat it.</h1>
-    <p class="hero-sub">
-      Scan any food barcode or ingredient list and get an instant halal verdict — in seconds.
-    </p>
-    <div class="download-row">
-      <a href="https://apps.apple.com/us/app/halal-pal-scanner/id6761399488" class="btn btn-primary">
-        <!-- Apple icon -->
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/>
-        </svg>
-        Download on iOS
-      </a>
-      <a href="#" class="btn btn-secondary">
-        <!-- Play icon -->
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3zm7.07 16.97L12.5 12 5.57 5.07l4.5 14.9z"/>
-        </svg>
-        Get it on Android
-      </a>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section class="features">
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/>
-          <line x1="9" y1="21" x2="9" y2="9"/>
-        </svg>
-      </div>
-      <h3>Barcode Scanner</h3>
-      <p>Point your camera at any barcode. Results are pulled from a database of millions of products worldwide.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-        </svg>
-      </div>
-      <h3>Ingredient Scanner</h3>
-      <p>Photograph the ingredient list and our OCR engine reads and analyses every item for halal compliance.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-      </div>
-      <h3>Instant Verdict</h3>
-      <p>Clear Halal, Haram, or Mushbooh result with the exact ingredient that triggered it — no guessing.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-        </svg>
-      </div>
-      <h3>Scan History</h3>
-      <p>Every scan is saved locally so you can look up past results without scanning again.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-      </div>
-      <h3>Dhabiha Mode</h3>
-      <p>Stricter standard that flags unverified meat sources. Switch between Standard Halal and Dhabiha in settings.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
-        </svg>
-      </div>
-      <h3>Premium — From $1.99/mo</h3>
-      <p>Unlimited scans, no ads, and a 7-day free trial on the annual plan. Free users get 3 scans per day.</p>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section class="how">
-    <h2>How it works</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
         <div>
-          <h4>Open the app and tap Scan</h4>
-          <p>Choose barcode mode to scan a product, or ingredient mode to photograph the label text.</p>
+          <span class="pill"><i></i> New in 2.0 · A whole new look</span>
+          <h1>Is it <em>halal?</em><br />Know in seconds.</h1>
+          <p class="lead">Scan a barcode or snap the ingredient list. Halal Pal gives you a clear Halal, Mushbooh or Haram verdict — and shows you exactly why.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://apps.apple.com/us/app/halal-pal-scanner/id6761399488">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/></svg>
+              Download on the App Store
+            </a>
+            <a class="btn btn-ghost" href="#features">See how it works</a>
+          </div>
+          <div class="checks">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Free to download</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>No account needed</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>History stays on your phone</span>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="phone"><div class="screen"><img src="images/app-1.jpg" alt="Halal Pal showing a Halal verdict with a halal-certified badge" /></div></div>
+          <div class="chip c1"><b style="background:var(--green)">✓</b><div>Halal<small>Certified label found</small></div></div>
+          <div class="chip c2"><b style="background:var(--amber)">!</b><div>Mushbooh<small>Source unspecified</small></div></div>
+          <div class="chip c3"><b style="background:var(--red);color:#fff">✕</b><div>Haram<small>Gelatin, unverified source</small></div></div>
         </div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div>
-          <h4>Point your camera</h4>
-          <p>The app reads the barcode or runs OCR on the ingredients list automatically.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div>
-          <h4>Get your verdict</h4>
-          <p>Halal, Haram, or Mushbooh — with the specific ingredient highlighted so you know exactly why.</p>
-        </div>
+    </section>
+
+    <!-- Trust strip -->
+    <div class="strip">
+      <div class="wrap">
+        <div class="stat"><strong>Millions</strong><span>of products</span></div>
+        <div class="stat"><strong>3 verdicts</strong><span>with the reasons why</span></div>
+        <div class="stat"><strong>Free</strong><span>3 scans every day</span></div>
       </div>
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="cta">
-    <div class="cta-card">
-      <h2>Start scanning for free</h2>
-      <p>Available on iPhone and Android. No account required.</p>
-      <div class="download-row">
-        <a href="https://apps.apple.com/us/app/halal-pal-scanner/id6761399488" class="btn btn-primary">
-          <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px">
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/>
-          </svg>
-          App Store
+    <!-- Verdicts -->
+    <section class="block" id="features">
+      <div class="wrap center">
+        <div class="eyebrow">Clear answers</div>
+        <h2>Three verdicts. No guesswork.</h2>
+        <p class="sub">Every result explains itself, with the flagged ingredients highlighted right in the list.</p>
+        <div class="verdicts" style="text-align:left">
+          <div class="verdict" style="--c: var(--green)">
+            <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <h3>Halal</h3>
+            <p>No prohibited ingredients found — or the product carries a halal-certified label.</p>
+          </div>
+          <div class="verdict" style="--c: var(--amber)">
+            <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="6" x2="12" y2="13"/><line x1="12" y1="18" x2="12" y2="18.5"/></svg></div>
+            <h3>Mushbooh</h3>
+            <p>Doubtful — an ingredient could come from a plant or an animal, and the label doesn’t say which.</p>
+          </div>
+          <div class="verdict" style="--c: var(--red)">
+            <div class="badge" style="color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></div>
+            <h3>Haram</h3>
+            <p>Contains a forbidden ingredient, like pork derivatives, alcohol or gelatin from an unverified source.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Showcase -->
+    <section class="block" style="padding-top:20px">
+      <div class="wrap">
+        <div class="row" style="--c: var(--red)">
+          <div class="row-text">
+            <div class="eyebrow">Hidden ingredients</div>
+            <h3>Spots what’s easy to miss</h3>
+            <p>Gelatin, E-numbers, animal-based additives — Halal Pal reads every ingredient so you don’t have to.</p>
+            <ul class="bullets">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Halal, beef or fish gelatin isn’t treated like unverified gelatin</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Mono- and diglycerides checked for plant or animal origin</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Recognises other spellings and scanning slips — “gelatine”, “gelatina”, even “gelatik”</li>
+            </ul>
+          </div>
+          <div class="row-visual"><div class="phone"><div class="screen"><img src="images/app-2.jpg" alt="A Haram verdict flagging gelatin" loading="lazy" /></div></div></div>
+        </div>
+
+        <div class="row flip" style="--c: #14B8A6">
+          <div class="row-text">
+            <div class="eyebrow">No barcode? No problem</div>
+            <h3>Scan the ingredient label</h3>
+            <p>Take a photo, drag the corners around the ingredient list, and get a verdict — even for products that aren’t in any database.</p>
+            <ul class="bullets">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reads English, French, German, Spanish and Swedish</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Text is read on your phone — photos are never uploaded</li>
+            </ul>
+          </div>
+          <div class="row-visual"><div class="phone"><div class="screen"><img src="images/app-4.jpg" alt="Selecting the ingredient list on a can" loading="lazy" /></div></div></div>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="eyebrow">Your history</div>
+            <h3>Every scan, saved</h3>
+            <p>Product photos, verdicts and times — search your past scans or filter by Halal, Mushbooh or Haram.</p>
+            <ul class="bullets">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Stored on your device, not in the cloud</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Rescans of saved products are instant</li>
+            </ul>
+          </div>
+          <div class="row-visual"><div class="phone"><div class="screen"><img src="images/app-5.jpg" alt="Scan history with product photos and filters" loading="lazy" /></div></div></div>
+        </div>
+
+        <div class="row flip" style="--c: var(--amber)">
+          <div class="row-text">
+            <div class="eyebrow">Your standard</div>
+            <h3>Standard or Dhabiha</h3>
+            <p>Choose the rules you follow. Dhabiha mode also flags meat and poultry without verified dhabiha slaughter.</p>
+          </div>
+          <div class="row-visual"><div class="phone"><div class="screen"><img src="images/app-6.jpg" alt="Settings with Standard and Dhabiha modes" loading="lazy" /></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature grid -->
+    <section class="block">
+      <div class="wrap center">
+        <div class="eyebrow">And more</div>
+        <h2>Built for the grocery aisle</h2>
+        <div class="grid" style="text-align:left">
+          <div class="card">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="8" x2="7" y2="16"/><line x1="11" y1="8" x2="11" y2="16"/><line x1="14" y1="8" x2="14" y2="16"/><line x1="17" y1="8" x2="17" y2="16"/></svg></div>
+            <h4>Instant barcode checks</h4>
+            <p>Millions of products from Open Food Facts and the USDA database.</p>
+          </div>
+          <div class="card">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 2.1 3.2-.3.9 3.1 2.8 1.6-1.2 3 1.2 3-2.8 1.6-.9 3.1-3.2-.3L12 22l-2.4-2.1-3.2.3-.9-3.1-2.8-1.6 1.2-3-1.2-3 2.8-1.6.9-3.1 3.2.3z"/><polyline points="8.5 12 11 14.5 15.5 10"/></svg></div>
+            <h4>Halal-certified badge</h4>
+            <p>Products with a halal label are clearly marked as certified.</p>
+          </div>
+          <div class="card">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+            <h4>Continuous scan</h4>
+            <p>Premium: scan a whole cart without stopping, with a distinct vibration for each verdict.</p>
+          </div>
+          <div class="card">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg></div>
+            <h4>Light &amp; dark mode</h4>
+            <p>A modern design that follows your iPhone’s appearance.</p>
+          </div>
+          <div class="card">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <h4>Report a problem</h4>
+            <p>Think a result is wrong? Send the details from any result in one tap.</p>
+          </div>
+          <div class="card">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <h4>Private by design</h4>
+            <p>No account, no sign-up. Your scan history never leaves your phone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="block" id="pricing">
+      <div class="wrap center">
+        <div class="eyebrow">Pricing</div>
+        <h2>Start free. Upgrade anytime.</h2>
+        <p class="sub">Every verdict and feature is free to try. Premium removes the limits.</p>
+        <div class="plans" style="text-align:left">
+          <div class="plan">
+            <h3>Free</h3>
+            <div class="price">$0</div>
+            <div class="note">Forever</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>3 scans per day</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Barcode &amp; ingredient scanning</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Standard &amp; Dhabiha modes</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Scan history</li>
+            </ul>
+          </div>
+          <div class="plan pro">
+            <span class="tag">1-week free trial</span>
+            <h3>Premium</h3>
+            <div class="price">$9.99 <small>/ year</small></div>
+            <div class="note">or $1.99 / month</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited scans</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>No ads</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Continuous scan</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Free</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="block" id="faq">
+      <div class="wrap center">
+        <div class="eyebrow">FAQ</div>
+        <h2>Questions, answered</h2>
+        <div class="faq" style="text-align:left">
+          <details>
+            <summary>Where does the product data come from?</summary>
+            <p>Barcode results come from Open Food Facts, an open database of millions of products worldwide, and the USDA FoodData Central database. The ingredients are then checked on your phone.</p>
+          </details>
+          <details>
+            <summary>What does “Mushbooh” mean?</summary>
+            <p>Mushbooh means doubtful. It’s used when an ingredient could come from either a plant or an animal — like natural flavors or mono- and diglycerides — and the label doesn’t say which.</p>
+          </details>
+          <details>
+            <summary>What’s the difference between Standard and Dhabiha mode?</summary>
+            <p>Standard mode flags ingredients that are forbidden or doubtful. Dhabiha mode is stricter: it also flags meat and poultry that don’t state verified dhabiha slaughter.</p>
+          </details>
+          <details>
+            <summary>What if a product isn’t found?</summary>
+            <p>Switch to Ingredients mode and take a photo of the ingredient list. Halal Pal reads it and gives you a verdict, even for products that aren’t in any database.</p>
+          </details>
+          <details>
+            <summary>Is the verdict always right?</summary>
+            <p>Halal Pal gives guidance based on product data and ingredient lists, which can be incomplete or change over time. When in doubt, verify with a certified halal authority. If you spot a wrong result, tap “Report a problem” and we’ll look into it.</p>
+          </details>
+          <details>
+            <summary>How do I cancel Premium?</summary>
+            <p>Open your iPhone’s Settings → your name → Subscriptions → Halal Pal, and tap Cancel. You keep Premium until the end of the period you paid for.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <div class="wrap">
+      <div class="cta">
+        <img src="images/app-icon.png" alt="" />
+        <h2>Shop with confidence</h2>
+        <p class="sub">Download Halal Pal Scanner and check your next product in seconds.</p>
+        <a class="btn btn-primary" href="https://apps.apple.com/us/app/halal-pal-scanner/id6761399488">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/></svg>
+          Download on the App Store
         </a>
-        <a href="#" class="btn btn-secondary">
-          <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px">
-            <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3zm7.07 16.97L12.5 12 5.57 5.07l4.5 14.9z"/>
-          </svg>
-          Google Play
-        </a>
       </div>
     </div>
-  </section>
 
-  <!-- Footer -->
+    <!-- Support -->
+    <section class="block" id="support">
+      <div class="wrap center">
+        <div class="eyebrow">Support</div>
+        <h2>We’re here to help</h2>
+        <div class="support" style="text-align:left">
+          <div class="card">
+            <h4>Wrong result?</h4>
+            <p>Tap <strong style="color:var(--text)">Report a problem</strong> at the bottom of any result — it fills in the product details for you.</p>
+          </div>
+          <div class="card">
+            <h4>Contact us</h4>
+            <p>Email <a href="mailto:tayseerdevelops@gmail.com">tayseerdevelops@gmail.com</a> and we’ll get back to you.</p>
+          </div>
+          <div class="card">
+            <h4>Guidance only</h4>
+            <p>Always verify with a certified halal authority when in doubt.</p>
+          </div>
+        </div>
+        <p class="sub" style="margin-top:28px">More answers on our <a href="support.html" style="color:var(--green-2);font-weight:700">Support page</a>.</p>
+      </div>
+    </section>
+  </main>
+
   <footer>
-    <p>&copy; 2025 Halal Pal. All rights reserved.</p>
-    <a href="privacy.html">Privacy Policy</a>
-    &nbsp;·&nbsp;
-    <a href="support.html">Support</a>
+    <div class="wrap">
+      <span>© 2026 Halal Pal Scanner</span>
+      <nav aria-label="Footer">
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+        <a href="mailto:tayseerdevelops@gmail.com">Contact</a>
+      </nav>
+    </div>
   </footer>
-
 </body>
 </html>
